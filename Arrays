@@ -1,0 +1,79 @@
+// structs are not the only aggregate data type in C++. An array is an aggregate data type that lets us access many variables of the same type through a single identifier.
+
+int testScore[30]{}; // allocate 30 integer variables in a fixed array
+
+// In the above example, we declare a fixed array named testScore, with a length of 30. A fixed array (also called a fixed length array or fixed size array) is an array where the length is known at compile time. When testScore is instantiated, 30 integers will be allocated.
+
+// Arrays can also be made from structs
+
+struct Rectangle
+{
+    int length{};
+    int width{};
+};
+Rectangle rects[5]{}; // declare an array of 5 Rectangle
+
+rects[0].length = 24;
+
+// In C++, array subscripts must always be an integral type. This includes char, short, int, long, long long, etc… and strangely enough, bool (where false gives an index of 0 and true gives an index of 1).
+
+// An array subscript can be a literal value, a variable (constant or non-constant), or an expression that evaluates to an integral type.
+
+int array[5]{}; // declare an array of length 5
+
+// using a literal (constant) index:
+array[1] = 7; // ok
+
+// using an enum (constant) index
+enum Animals
+{
+    animal_cat = 2
+};
+array[animal_cat] = 4; // ok
+
+// using a variable (non-constant) index:
+int index{ 3 };
+array[index] = 7; // ok
+
+// using an expression that evaluates to an integer index:
+array[1+2] = 7; // ok
+
+// using a literal constant
+int numberOfLessonsPerDay[7]{}; // Ok
+
+// using a constexpr symbolic constant
+constexpr int daysPerWeek{ 7 };
+int numberOfLessonsPerDay[daysPerWeek]{}; // Ok
+
+// using an enumerator
+enum DaysOfWeek
+{
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday,
+
+    maxDaysOfWeek
+};
+int numberOfLessonsPerDay[maxDaysOfWeek]{}; // Ok
+
+// using a macro
+#define DAYS_PER_WEEK 7
+int numberOfLessonsPerDay[DAYS_PER_WEEK]{}; // Works, but don't do this (use a constexpr symbolic constant instead)
+
+// Note that non-const variables or runtime constants cannot be used:
+
+// using a non-const variable
+int daysPerWeek{};
+std::cin >> daysPerWeek;
+int numberOfLessonsPerDay[daysPerWeek]{}; // Not ok -- daysPerWeek is not a compile-time constant!
+
+// using a runtime const variable
+int temp{ 5 };
+const int daysPerWeek{ temp }; // the value of daysPerWeek isn't known until runtime, so this is a runtime constant, not a compile-time constant!
+int numberOfLessonsPerDay[daysPerWeek]{}; // Not ok
+
+// Fixed arrays provide an easy way to allocate and use multiple variables of the same type so long as the length of the array is known at compile time.
